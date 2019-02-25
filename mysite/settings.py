@@ -48,14 +48,16 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'polls.middleware.TimezoneMiddleware',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
-
+print BASE_DIR
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates1')],
+        # 'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,8 +82,8 @@ DATABASES = {
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'NAME': 't',
         'USER': 'root',
-        'PASSWORD': '1',
-        'HOST': '127.0.0.1',
+        'PASSWORD': '123',
+        'HOST': '192.168.1.37',
         'PORT': '3306'
     }
 }

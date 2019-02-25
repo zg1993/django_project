@@ -5,7 +5,29 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import Question, Choice
 from django.template import loader
 from django.urls import reverse
+from django.views import generic
+from django.utils.translation import gettext as _
 import traceback
+
+
+
+class IndexView(generic.ListView):
+    template_name = 'polls/index.html'
+    context_object_name = 'latest_question_list'
+
+    def get_queryset(self):
+        # latest_question_list = Question.objects.order_by('-put_date')[:5]
+        return Question.objects.order_by('-put_date')[:5]
+
+
+class DetailView(generic.DetailView):
+    model = Question
+    template_name = 'polls/detail.html'
+
+
+class ResultView(generic.DetailView):
+    model = Question
+    template_name = 'polls/results.html'
 
 
 # Create your views here.
@@ -29,6 +51,10 @@ def results(request, question_id):
 
 
 def vote(request, question_id):
+    # for attr in dir(request.session):
+    #     if not attr.startswith('__'):
+    #         print attr, ': ', request.session.get(attr)
+
     question = get_object_or_404(Question, pk=question_id)
     try:
         choice = Choice.objects.get(pk=request.POST['choice'])
@@ -41,3 +67,8 @@ def vote(request, question_id):
         choice.votes += 1
         choice.save()
         return HttpResponseRedirect(reverse('polls:results', args=(question.id, )))
+
+
+def t(request):
+    output = _('Welcome to my site!')
+    return HttpResponse(output)
