@@ -1,0 +1,54 @@
+文章和作者多对1
+文章和普通用户多对多（点赞和收藏）
+评论和文章多对一
+评论和用户多对一
+
+user:
+  username char(max_length=30)
+  password  char(max_length=256)
+  last_login  date(blank=True, null=True)
+  is_active   bool(default=False)
+
+author:
+  name
+  password
+  register_date
+  profile	
+
+article:
+  title  char(max_lenght=256)
+  content  text
+  put_date
+  update_time
+  author foreignkey(Author)
+  num_comments int(defalut=0)
+  num_polls 
+  num favorites  
+  # comments 
+  # polls
+  # favorites
+  
+comment：
+  article  foreignkey(Article)
+  user   foreignkey(User)
+  content  text
+  put_date date
+  poll_num int(default=0)
+
+poll:
+  user foreignkey(User)
+  article foreignkey(article)
+  comment foreignkey(Comment)
+
+favorite:
+  user foreignkey(User)
+  article foreignkey(Article)
+  followed_author  foreignkey(Author)
+  
+
+
+
+
+
+
+category

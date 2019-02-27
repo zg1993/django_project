@@ -16,7 +16,5 @@ class TimezoneMiddleware(MiddlewareMixin):
 
     def process_response(self, request, response):
         tzname = filter(lambda i: 'hang' in i, pytz.all_timezones)[0]
-        print tzname
         timezone.activate(pytz.timezone(tzname))
-        print dir(response)
         return response
