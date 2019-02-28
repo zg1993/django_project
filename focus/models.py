@@ -19,6 +19,9 @@ class Author(models.Model):
     password = models.CharField(max_length=256)
     register_date = models.DateTimeField()
     profile = models.TextField()
+    favorites = models.ManyToManyField(User,
+                                       through='Favorite',
+                                       through_fields=('author', 'user'))
 
 
 class Article(models.Model):
@@ -27,10 +30,14 @@ class Article(models.Model):
     put_date = models.DateTimeField()
     update_time = models.DateTimeField()
     author = models.ForeignKey(Author)
-    polls = models.ManyToManyField(User, through='Poll',
-                                   through_fields=('article', 'user'))
-    favotites = models.ManyToManyField(User, throuth='Favorite',
-                                       through_fields=('article', 'user'))
+    polls = models.ManyToManyField(User,
+                                   through='Poll',
+                                   through_fields=('article', 'user'),
+                                   related_name='poll_users')
+    favorites = models.ManyToManyField(User,
+                                       through='Favorite',
+                                       through_fields=('article', 'user'),
+                                       related_name='favorite_users')
     num_comments = models.IntegerField(default=0)
     num_polls = models.IntegerField(default=0)
     num_favotites = models.IntegerField(default=0)
@@ -42,6 +49,10 @@ class Comment(models.Model):
     content = models.TextField()
     put_date = models.DateTimeField()
     poll_num = models.IntegerField(default=0)
+    polls = models.ManyToManyField(User,
+                                   through='Poll',
+                                   through_fields=('comment', 'user'),
+                                   related_name='poll_user')
 
 
 class Poll(models.Model):
@@ -54,15 +65,5 @@ class Favorite(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    date = models.DateTimeField()
 
-
-class Comment(models.Model):
-    article = models.ForeignKey(Article, on_delete=models.CASCADE)
-    user = models.ForeignKey(User)
-    content = models.TextField()
-    put_date = models.DateTimeField()
-    poll_num = models.IntegerField(default=0)
-
-
-class Poll(models.Model):
-    pass
