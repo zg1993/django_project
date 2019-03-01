@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
 # Create your models here.
 
@@ -17,7 +18,7 @@ class User(models.Model):
 class Author(models.Model):
     name = models.CharField(max_length=30)
     password = models.CharField(max_length=256)
-    register_date = models.DateTimeField()
+    register_date = models.DateTimeField(default=timezone.now)
     profile = models.TextField()
     favorites = models.ManyToManyField(User,
                                        through='Favorite',
@@ -27,7 +28,7 @@ class Author(models.Model):
 class Article(models.Model):
     title = models.CharField(max_length=256)
     content = models.TextField()
-    put_date = models.DateTimeField()
+    put_date = models.DateTimeField(default=timezone.now)
     update_time = models.DateTimeField()
     author = models.ForeignKey(Author)
     polls = models.ManyToManyField(User,
@@ -40,14 +41,14 @@ class Article(models.Model):
                                        related_name='favorite_users')
     num_comments = models.IntegerField(default=0)
     num_polls = models.IntegerField(default=0)
-    num_favotites = models.IntegerField(default=0)
+    num_favorites = models.IntegerField(default=0)
 
 
 class Comment(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     user = models.ForeignKey(User)
     content = models.TextField()
-    put_date = models.DateTimeField()
+    put_date = models.DateTimeField(default=timezone.now)
     poll_num = models.IntegerField(default=0)
     polls = models.ManyToManyField(User,
                                    through='Poll',
